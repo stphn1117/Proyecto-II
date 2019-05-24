@@ -251,36 +251,76 @@ void procesar(String input, String * output){
 }
 
 String implementar(String llave, String valor){
+  int y=0;
+  
   /**
    * La variable result puede cambiar para beneficio del desarrollador
    * Si desea obtener más información al ejecutar un comando.
    */
- 
+ /***********************************************************************************************************************************************************/
   String result="ok;";
   Serial.print("Comparing llave: ");
   Serial.println(llave);
   if(llave == "pwm"){
-    Serial.print("Move....: ");
-    Serial.println(valor);
+    
+    if(valor.toInt()==0){
+      digitalWrite (In1,LOW);
+      digitalWrite (In2,LOW);
+      analogWrite (EnA,0);
+      result = "detenido";
+    }
+    else if(valor.toInt()>0){
+      digitalWrite (In1,HIGH);
+      digitalWrite (In2,LOW);
+      analogWrite (EnA,valor.toInt());
+      result = "adelante";
+    }
+    else if(valor.toInt()<0){
+      digitalWrite (In2,HIGH);  
+      digitalWrite (In1,LOW);
+      y= -(valor.toInt());
+      analogWrite (EnA,y);
+      
+      result = "reversa";
+      
+    } 
+    
+      Serial.print("Move....: ");
+      Serial.println(valor);
+    
+    
+    
+    
     //# AGREGAR PARA CÓDIGO PARA MOVER EL CARRO HACIA DELANTE Y ATRAS
   }
  
   else if(llave == "dir"){
-    switch (valor.toInt()){
-      case 1:
-        Serial.println("Girando derecha");
-        //# AGREGAR CÓDIGO PARA GIRAR DERECHA
-        break;
-      case -1:
-        Serial.println("Girando izquierda");
-        //# AGREGAR CÓDIGO PARA GIRAR IZQUIERDA
-        break;
-       default:
-        Serial.println("directo");
-        //# AGREGAR CÓDIGO PARA NO GIRAR 
-        break;
+      if(valor.toInt() == 1){
+      digitalWrite (In3,HIGH);
+      digitalWrite (In4,LOW);
+      analogWrite(EnB,800);
+      result = "derecha";
+      Serial.println("Girando derecha");
+      }
+
+      else if(valor.toInt() == 0){
+      digitalWrite (In3,LOW);
+      digitalWrite (In4,LOW);
+      analogWrite(EnB,0);
+      result = "directo";
+      Serial.println("directo");
+      }
+
+      else if(valor.toInt() == -1){
+      digitalWrite (In3,LOW);
+      digitalWrite (In4,HIGH);
+      analogWrite(EnB,800);
+      result = "izq";
+      Serial.println("Girando izquierda");
+        
     }
   }
+  
   else if(llave[0] == 'l'){
     Serial.println("Cambiando Luces");
     Serial.print("valor luz: ");
