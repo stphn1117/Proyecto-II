@@ -78,8 +78,11 @@ const long interval = 100;
 #define In1 D3 // D4 en HIGH : retroceder
 #define In2 D2 // D3 en HIGH : avanzar
 #define In3 D1 // 
-#define EnB D0 // 
-#define In4 D5 // 0 para ir hacia adelante
+#define EnB D5 // 
+#define In4 D0 //
+#define bat A0 //
+// 0 para ir hacia adelante
+
 
 
 /**
@@ -146,12 +149,18 @@ void setup() {
  * Esta función comprueba que haya un nuevo mensaje y llama a la función de procesar
  * para interpretar el mensaje recibido.
  */
+
 byte data= 0b11111111;
 int Diz=0;
 int Dde=0;
 int fr=0;
 int tra=0;
-
+float voltage = 0;
+int analogV = 0;
+int vv = 0;
+String bate = "nivel de bateria: " ;
+int r = 0;
+int foto = 0;
 void loop() {
   
   unsigned long currentMillis = millis();
@@ -204,8 +213,6 @@ void loop() {
  * Esta función es semejante a string.split(char) de python
  * 
  */
-
-
 void procesar(String input, String * output){
   //Buscamos el delimitador ;
   Serial.println("Checking input....... ");
@@ -234,7 +241,175 @@ void procesar(String input, String * output){
     }
     else if(comando == "sense"){
       *output = getSense();         
+    
     }
+
+    else if(comando == "zig"){
+      digitalWrite (In1,HIGH);
+      digitalWrite (In2,LOW);
+      analogWrite (EnA,1023);
+      result = "adelante";
+      digitalWrite (In3,HIGH);
+      digitalWrite (In4,LOW);
+      analogWrite(EnB,1023);
+      delay(2000);
+      result="izquierda";
+      /*digitalWrite (In3,LOW);
+      digitalWrite (In4,LOW);
+      analogWrite (EnB,0);
+      delay(3000);
+      result="directo";**/
+      digitalWrite (In3,LOW);
+      digitalWrite (In4,HIGH);
+      analogWrite(EnB,1000);
+      delay(1000);
+      result = "derecha";
+      /*digitalWrite (In3,LOW);
+      digitalWrite (In4,LOW);
+      analogWrite (EnB,0);
+      delay(3000);**/
+      result="directo";
+      digitalWrite (In3,HIGH);
+      digitalWrite (In4,LOW);
+      analogWrite(EnB,1000);
+      delay(2000);
+      result="izquierda";
+      /*digitalWrite (In3,LOW);
+      digitalWrite (In4,LOW);
+      analogWrite (EnB,0);
+      delay(3000);
+      result="directo";*/
+      digitalWrite (In3,LOW);
+      digitalWrite (In4,HIGH);
+      analogWrite(EnB,1000);
+      result = "derecha";
+      delay(2000);
+      digitalWrite (In1,LOW);
+      digitalWrite (In2,LOW);
+      analogWrite (EnA,0);
+      digitalWrite (In3,LOW);
+      digitalWrite (In4,LOW);
+      analogWrite (EnB,0);
+      result = "detenido";
+    }
+
+    else if(comando=="cir"){
+      digitalWrite (In3,HIGH);
+      digitalWrite (In4,LOW);
+      analogWrite(EnB,1000);
+      digitalWrite (In1,HIGH);
+      digitalWrite (In2,LOW);
+      analogWrite (EnA,1000);
+      delay(8000);
+      result="circulo a la izquierda";
+      digitalWrite (In1,LOW);
+      digitalWrite (In2,LOW);
+      analogWrite (EnA,0);
+      digitalWrite (In3,LOW);
+      digitalWrite (In4,LOW);
+      analogWrite (EnB,0);
+      result = "detenido";
+      
+    }
+
+    else if(comando=="inf"){
+      digitalWrite (In1,HIGH);
+      digitalWrite (In2,LOW);
+      analogWrite (EnA,1000);
+      result="avanza";
+      digitalWrite (In3,LOW);
+      digitalWrite (In4,HIGH);
+      analogWrite(EnB,1000);
+      delay(12000);
+      result="derecha";
+      digitalWrite (In3,LOW);
+      digitalWrite (In4,LOW);
+      analogWrite (EnB,0);
+      delay(1000);
+      result="directo";
+      digitalWrite (In3,HIGH);
+      digitalWrite (In4,LOW);
+      analogWrite(EnB,1000);
+      delay(12000);
+      result="izquierda";
+      digitalWrite (In3,LOW);
+      digitalWrite (In4,LOW);
+      analogWrite (EnB,0);
+      delay(1000);
+      result="directo";
+      
+      digitalWrite (In1,LOW);
+      digitalWrite (In2,LOW);
+      analogWrite (EnA,0);
+      digitalWrite (In3,LOW);
+      digitalWrite (In4,LOW);
+      analogWrite (EnB,0);
+    }
+    else if(comando=="esp"){
+      digitalWrite (In1,HIGH);
+      digitalWrite (In2,LOW);
+      analogWrite (EnA,1000);
+      result="avanza";
+      digitalWrite (In3,HIGH);
+      digitalWrite (In4,LOW);
+      analogWrite(EnB,1000);
+      delay(3000);
+      result="izquierda";
+      digitalWrite (In3,LOW);
+      digitalWrite (In4,LOW);
+      analogWrite (EnB,0);
+      delay(1000);
+      result="directo";
+      digitalWrite (In3,LOW);
+      digitalWrite (In4,HIGH);
+      analogWrite(EnB,1000);
+      delay(2000);
+      result="derecha";
+      digitalWrite (In3,LOW);
+      digitalWrite (In4,LOW);
+      analogWrite (EnB,0);
+      delay(2000);
+      result="directo";
+      digitalWrite (In3,LOW);
+      digitalWrite (In4,HIGH);
+      analogWrite(EnB,1000);
+      delay(3000);
+      result="derecha";
+      digitalWrite (In3,LOW);
+      digitalWrite (In4,LOW);
+      analogWrite (EnB,0);
+      delay(2000);
+      result="directo";
+      digitalWrite (In3,HIGH);
+      digitalWrite (In4,LOW);
+      analogWrite(EnB,1000);
+      delay(2000);
+      result="izquierda";
+      digitalWrite (In3,LOW);
+      digitalWrite (In4,LOW);
+      analogWrite (EnB,0);
+      delay(2000);
+      result="directo";
+      digitalWrite (In1,LOW);
+      digitalWrite (In2,LOW);
+      digitalWrite (In3,LOW);
+      digitalWrite (In4,LOW);
+      result="detenido";
+      
+      
+
+      
+    }
+    
+    else if(comando=="det"){
+      digitalWrite (In1,LOW);
+      digitalWrite (In2,LOW);
+      digitalWrite (In3,LOW);
+      digitalWrite (In4,LOW);
+      result="detenido";
+      
+      
+      }
     /**
      * ## AGREGAR COMPARACIONES PARA COMANDOS SIN VALOR
      * EJEM: else if (comando == CIRCLE) {
@@ -251,25 +426,24 @@ void procesar(String input, String * output){
 }
 
 String implementar(String llave, String valor){
-  int y=0;
-  
+   int y=0;
   /**
    * La variable result puede cambiar para beneficio del desarrollador
    * Si desea obtener más información al ejecutar un comando.
    */
- /***********************************************************************************************************************************************************/
   String result="ok;";
   Serial.print("Comparing llave: ");
   Serial.println(llave);
+  
   if(llave == "pwm"){
-    
-    if(valor.toInt()==0){
+
+      if(valor.toInt()==0){
       digitalWrite (In1,LOW);
       digitalWrite (In2,LOW);
       analogWrite (EnA,0);
       result = "detenido";
     }
-    else if(valor.toInt()>0){
+      else if(valor.toInt()>0){
       digitalWrite (In1,HIGH);
       digitalWrite (In2,LOW);
       analogWrite (EnA,valor.toInt());
@@ -287,20 +461,34 @@ String implementar(String llave, String valor){
     
       Serial.print("Move....: ");
       Serial.println(valor);
+
     
-    
-    
-    
-    //# AGREGAR PARA CÓDIGO PARA MOVER EL CARRO HACIA DELANTE Y ATRAS
   }
+  
+   else if(llave == "blvl"){
+      vv = analogRead(bat);
+      analogV = bat*2;
+      r = analogV*(100/6);
+      result = bate + r +"%";
+      }
+
+    else if(llave == "sense2"){
+        foto = analogRead(ldr);
+        if(foto==0){
+          result = "es de día";
+          }
+        else if (foto==1023){
+          result = "es de noche";
+          }
+    }
  
   else if(llave == "dir"){
-      if(valor.toInt() == 1){
+    if(valor.toInt() == -1){
       digitalWrite (In3,HIGH);
       digitalWrite (In4,LOW);
-      analogWrite(EnB,800);
-      result = "derecha";
-      Serial.println("Girando derecha");
+      analogWrite(EnB,1000);
+      result = "izquierda";
+      Serial.println("Girando izquierda");
       }
 
       else if(valor.toInt() == 0){
@@ -311,27 +499,22 @@ String implementar(String llave, String valor){
       Serial.println("directo");
       }
 
-      else if(valor.toInt() == -1){
+      else if(valor.toInt() == 1){
       digitalWrite (In3,LOW);
       digitalWrite (In4,HIGH);
-      analogWrite(EnB,800);
-      result = "izq";
-      Serial.println("Girando izquierda");
-        
-    }
+      analogWrite(EnB,1000);
+      result = "derecha";
+      Serial.println("Girando derecha");
+      }
+   
   }
-  
   else if(llave[0] == 'l'){
     Serial.println("Cambiando Luces");
     Serial.print("valor luz: ");
     Serial.println(valor);
-    
-    
-   
     //Recomendación utilizar operadores lógico de bit a bit (bitwise operators)
     switch (llave[1]){
-    
-      case 'f':
+            case 'f':
       //# AGREGAR CÓDIGO PARA ENCENDER LUCES FRONTALES
       if(valor=="1"){
         fr = 1;
@@ -422,6 +605,7 @@ String implementar(String llave, String valor){
         result = "Luces Frontales Apagadas";
         Serial.println("Luces frontales");
          }
+       
          else{
          Dde = 0;
          data= data | 0b11111111;
@@ -431,6 +615,8 @@ String implementar(String llave, String valor){
         
       }
         break;
+
+      
       /**
        * # AGREGAR CASOS CON EL FORMATO l[caracter]:valor;
        * SI SE DESEAN manejar otras salidas del registro de corrimiento
@@ -440,10 +626,9 @@ String implementar(String llave, String valor){
         
         break;
     }
-     shiftOut(ab, clk, LSBFIRST, data);
     //data VARIABLE QUE DEFINE CUALES LUCES SE ENCIENDEN Y CUALES SE APAGAN
+    shiftOut(ab, clk, LSBFIRST, data);
   }
-  
   /**
    * El comando tiene el formato correcto pero no tiene sentido para el servidor
    */
@@ -452,17 +637,16 @@ String implementar(String llave, String valor){
     Serial.println(result);
   }
   return result;
-  
 }
 
 /**
  * Función para obtener los valores de telemetría del auto
  */
 String getSense(){
+      
   //# EDITAR CÓDIGO PARA LEER LOS VALORES DESEADOS
-  int batteryLvl = -1;
-  int light = -1;
-
+  int batteryLvl = 0;
+  int light = 0;
   // EQUIVALENTE A UTILIZAR STR.FORMAT EN PYTHON, %d -> valor decimal
   char sense [16];
   sprintf(sense, "blvl:%d;ldr:%d;", batteryLvl, light);
