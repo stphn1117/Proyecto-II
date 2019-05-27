@@ -8,6 +8,7 @@ Estudiantes:
 V_Morales_Alvarado_E_Villalta_Segura
 
 Valeria Morales Alvarado
+
 Estefanny Villalta Segura
 
 Curso:
